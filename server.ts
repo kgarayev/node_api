@@ -8,6 +8,9 @@ const myApp = express();
 // good practice
 const PORT = process.env.PORT || 6001;
 
+// handle static file middleware
+myApp.use(express.static("public"));
+
 // to start the server
 myApp.listen(PORT, () => {
   console.log("The server is now running!");
