@@ -14,9 +14,10 @@ const simpleAuth = (req: ExpressRequest, res: ExpressResponse, next: Next) => {
 
     // proceed if matches
     next();
+  } else {
+    // do not allow to proceed but respond
+    return res.send("Sorry, bad API key");
   }
-  // do not allow to proceed but respond
-  res.send("Sorry, bad API key");
 };
 
 module.exports = simpleAuth;

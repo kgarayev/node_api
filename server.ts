@@ -42,7 +42,7 @@ myApp.use(logging);
 myApp.use(auth);
 
 // route middleware
-myApp.use("/users", require("./routes/users")(apiData));
+myApp.use("/users", require("./routes/users"));
 
 // Mddleware section FINISH
 
