@@ -4,9 +4,6 @@ const express = require("express");
 // import router
 const router = express.Router();
 
-// importing api data
-const apiData = require("../apiData.json");
-
 // route
 router.get("/", (req, res) => {
   // log the headers of the request
@@ -15,13 +12,8 @@ router.get("/", (req, res) => {
   // destructuring the request queries
   const { userName, num } = req.query;
 
-  // add the id into the api data
-  apiData.users.forEach((user, index) => {
-    user.id = index + 1;
-  });
-
   // make a copy of api json data
-  let _apiData = { ...apiData };
+  let _apiData = { ...req.apiData };
 
   // if a specific user is asked for
   if (req.query.userName) {
