@@ -35,13 +35,16 @@ myApp.use(express.json());
 myApp.use(logging);
 
 // API KEY validation middleware
-myApp.use(simpleAuth);
+// myApp.use(simpleAuth);
 
 // route middleware
 myApp.use("/users", require("./routes/users"));
 
 // route middleware
 myApp.use("/", require("./routes/demo"));
+
+// route middleware
+myApp.use("/get", require("./routes/get"));
 
 // Mddleware section FINISH
 
