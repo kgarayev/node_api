@@ -1,6 +1,12 @@
 // importing express framework
 const express = require("express");
 
+// Importing types and creating an alias to avoid any naming conflict elsewhere in the project
+const {
+  Request: ExpressRequest,
+  Response: ExpressResponse,
+} = require("express");
+
 // creating a new instance of express
 const myApp = express();
 
@@ -9,8 +15,9 @@ const myApp = express();
 const PORT = process.env.PORT || 6001;
 
 // route
-myApp.get("/", () => {
-  console.log("New request from the front!");
+myApp.get("/", (req: typeof ExpressRequest, res: typeof ExpressResponse) => {
+  console.log("New request to: /", req);
+  res.send("Hello from backend!");
 });
 
 // handle static file middleware
