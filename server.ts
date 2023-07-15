@@ -35,6 +35,9 @@ const myApp = express();
 // handle static files
 myApp.use(express.static("public"));
 
+// convert the request body to json
+myApp.use(express.json());
+
 // a logging middleware
 myApp.use(logging);
 
