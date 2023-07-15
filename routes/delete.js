@@ -5,7 +5,7 @@ const express = require("express");
 const router = express.Router();
 
 // delete a user router
-router.delete("/users/:id", (req, res) => {
+router.delete("/user/:id", (req, res) => {
   const id = Number(req.params.id);
 
   //   destructure user data

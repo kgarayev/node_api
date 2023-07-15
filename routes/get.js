@@ -9,7 +9,7 @@ router.get("/users", (req, res) => {
   res.send({ status: 1, users: req.apiData.users });
 });
 
-router.get("/users/:id", (req, res) => {
+router.get("/user/:id", (req, res) => {
   const id = Number(req.params.id);
 
   // make a copy of api json data
