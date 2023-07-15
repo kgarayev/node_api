@@ -10,7 +10,7 @@ router.post("/", (req, res, next) => {
   console.log("post request", req.body);
 });
 
-router.get("/demo/:booId", (req, res, next) => {
+router.get("/", (req, res, next) => {
   // log the headers of the request
   console.log("get request", req.header);
 
