@@ -4,6 +4,7 @@ const express = require("express");
 // import router
 const router = express.Router();
 
+// get user router
 router.get("/users", (req, res) => {
   res.send({ status: 1, users: req.apiData.users });
 });
@@ -14,6 +15,7 @@ router.get("/users/:id", (req, res) => {
   // make a copy of api json data
   const _apiData = { ...req.apiData };
 
+  //   destructure user data
   const { users } = _apiData;
 
   // defensive checks

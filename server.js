@@ -37,14 +37,17 @@ myApp.use(logging);
 // API KEY validation middleware
 // myApp.use(simpleAuth);
 
-// route middleware
+// view users route middleware
 myApp.use("/users", require("./routes/users"));
 
 // route middleware
 myApp.use("/", require("./routes/demo"));
 
-// route middleware
+// get route middleware
 myApp.use("/get", require("./routes/get"));
+
+// delete route middleware
+myApp.use("/delete", require("./routes/delete"));
 
 // Mddleware section FINISH
 
