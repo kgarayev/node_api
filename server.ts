@@ -7,6 +7,9 @@ const {
   Response: ExpressResponse,
 } = require("express");
 
+// importing api data
+const apiData = require("./apiData.json");
+
 // creating a new instance of express
 const myApp = express();
 
@@ -16,8 +19,16 @@ const PORT = process.env.PORT || 6001;
 
 // route
 myApp.get("/", (req: typeof ExpressRequest, res: typeof ExpressResponse) => {
-  console.log("New request to: /", req);
-  res.send("Hello from backend!");
+  // log the headers of the request
+  console.log("New request to: /", req.headers);
+
+  // add the id into the api data
+  apiData.users.forEach((user: { id: number }, index: number) => {
+    user.id = index + 1;
+  });
+
+  // send the response to the front
+  res.send(apiData);
 });
 
 // handle static file middleware
