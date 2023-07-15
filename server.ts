@@ -26,7 +26,7 @@ interface User {
 const apiData = require("./apiData.json");
 
 // define the API KEY
-const apiKey = "ABCD1234";
+const apiKey = "abcd1234";
 
 // creating a new instance of express
 const myApp = express();
@@ -47,6 +47,8 @@ myApp.use((req: Request, res: Response, next: Next) => {
 
 // API KEY validation middleware
 myApp.use((req: Request, res: Response, next: Next) => {
+  console.log(apiKey);
+
   // defensive check to see if the API KEY entered matches the one in the system
   if (req.headers.api_key === apiKey) {
     // proceed if matches
