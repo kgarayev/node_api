@@ -8,6 +8,11 @@ const myApp = express();
 // good practice
 const PORT = process.env.PORT || 6001;
 
+// route
+myApp.get("/", () => {
+  console.log("New request from the front!");
+});
+
 // handle static file middleware
 myApp.use(express.static("public"));
 
