@@ -63,14 +63,6 @@ router.patch("/user/:id", async (req, res) => {
     users[indexOf].password = password;
   }
 
-  // additionally to validate with joi:
-  //   firstName
-  //   lastName
-  //   number
-  //   email
-  //   dob
-  //   password
-
   res.send({ status: 1, message: "User updated" });
 });
 
