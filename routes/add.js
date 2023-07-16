@@ -13,8 +13,7 @@ router.post("/user", (req, res) => {
   const { users } = req.apiData;
 
   //   destructuring the body
-  const { firstName, lastName, number, email, dob, password, accounts } =
-    req.body;
+  const { firstName, lastName, number, email, dob, password } = req.body;
 
   // not needed now could be used later
 

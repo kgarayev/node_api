@@ -52,6 +52,9 @@ myApp.use("/delete", require("./routes/delete"));
 // add route middleware
 myApp.use("/add", require("./routes/add"));
 
+// update route middleware
+myApp.use("/update", require("./routes/update"));
+
 // Mddleware section FINISH
 
 // ability to choose available port to use
