@@ -4,8 +4,11 @@ const express = require("express");
 // create an instance of router
 const router = express.Router();
 
+// importing joi validator
+const { validate } = require("../validation/index");
+
 // router to update the user information
-router.patch("/user/:id", (req, res) => {
+router.patch("/user/:id", async (req, res) => {
   // convert id from string to number
   const id = req.params.id;
 
@@ -21,6 +24,15 @@ router.patch("/user/:id", (req, res) => {
   if (indexOf === -1) {
     res.send({ status: 0, reason: "Id not found" });
     return;
+  }
+
+  // validate
+  let localErrors = await validate(req.body, "updateUser");
+
+  console.log(localErrors);
+
+  if (localErrors) {
+    res.send({ status: 0, reason: "Incomplete or invalid request" });
   }
 
   //   destructuring the body

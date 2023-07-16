@@ -8,12 +8,24 @@ const router = express.Router();
 // importing the random id generator function
 const { genRandomString } = require("../utils/math");
 
+// importing joi validator
+const { validate } = require("../validation/index");
+
 // add user router
-router.post("/user", (req, res) => {
+router.post("/user", async (req, res) => {
   console.log(req.body);
 
   //   destructure users data from the apiData
   const { users } = req.apiData;
+
+  // validate
+  let localErrors = await validate(req.body, "addUser");
+
+  console.log(localErrors);
+
+  if (localErrors) {
+    res.send({ status: 0, reason: "Incomplete or invalid request" });
+  }
 
   //   destructuring the body
   const { firstName, lastName, number, email, dob, password } = req.body;
@@ -31,25 +43,23 @@ router.post("/user", (req, res) => {
   //   } = accounts[0];
 
   const firstBoolean =
+    firstName &&
     typeof firstName === "string" &&
+    lastName &&
     typeof lastName === "string" &&
+    number &&
     typeof Number(number) === "number" &&
+    email &&
     typeof email === "string" &&
+    dob &&
     typeof dob === "string" &&
+    password &&
     typeof password === "string";
 
   // defensive check
   if (!firstBoolean) {
     res.send({ status: 0, reason: "Incomplete or invalid request" });
   }
-
-  // additionally to validate with joi:
-  //   firstName
-  //   lastName
-  //   number
-  //   email
-  //   dob
-  //   password
 
   //   find the index if the user exists
   const indexOf = users.findIndex((user) => {
