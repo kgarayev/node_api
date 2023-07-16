@@ -6,16 +6,10 @@ const router = express.Router();
 
 // delete a user router
 router.delete("/user/:id", (req, res) => {
-  const id = Number(req.params.id);
+  const id = req.params.id;
 
   //   destructure user data
   const { users } = req.apiData;
-
-  // defensive checks
-  if (Number.isNaN(id)) {
-    res.send({ status: 0, reason: "Invalid id" });
-    return;
-  }
 
   //   find the index of the user
   const indexOf = users.findIndex((user) => {
@@ -23,7 +17,7 @@ router.delete("/user/:id", (req, res) => {
   });
 
   // defensive checks
-  if (indexOf < 0) {
+  if (indexOf === -1) {
     res.send({ status: 0, reason: "Id is not found, maybe already deleted" });
     return;
   }

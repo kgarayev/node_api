@@ -10,7 +10,7 @@ router.get("/users", (req, res) => {
 });
 
 router.get("/user/:id", (req, res) => {
-  const id = Number(req.params.id);
+  const id = req.params.id;
 
   // make a copy of api json data
   const _apiData = { ...req.apiData };
@@ -18,22 +18,16 @@ router.get("/user/:id", (req, res) => {
   //   destructure user data
   const { users } = _apiData;
 
-  // defensive checks
-  if (Number.isNaN(id)) {
-    res.send({ status: 0, reason: "Invalid id" });
-    return;
-  }
-
-  // defensive checks
-  if (id > users.length) {
-    res.send({ status: 0, reason: "Id is not found" });
-    return;
-  }
-
   //   find the specific user
   const user = users.find((user) => {
     return user.id === id;
   });
+
+  //check that char exists
+  if (!user) {
+    res.send({ status: 0, reason: "Id not found" });
+    return;
+  }
 
   res.send({ status: 1, user });
 });

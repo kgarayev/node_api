@@ -5,6 +5,9 @@ const { connected } = require("process");
 // import router
 const router = express.Router();
 
+// importing the random id generator function
+const { genRandomString } = require("../utils/math");
+
 // add user router
 router.post("/user", (req, res) => {
   console.log(req.body);
@@ -64,7 +67,7 @@ router.post("/user", (req, res) => {
 
   //   push the data into the apiData whilst generating random id number and an empty accounts array
   req.apiData.users.push({
-    id: Math.round(Math.random() * 1000000),
+    id: genRandomString(),
     firstName,
     lastName,
     number,

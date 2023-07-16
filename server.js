@@ -8,12 +8,15 @@ const simpleAuth = require("./middleware/simpleAuth");
 // importing api data
 const apiData = require("./apiData.json");
 
+// importing the random id generator function
+const { genRandomString } = require("./utils/math");
+
 // creating a new instance of express
 const myApp = express();
 
 // add the id into the api data
 apiData.users.forEach((user, index) => {
-  user.id = index + 1;
+  user.id = genRandomString();
 });
 
 // Middleware section START

@@ -7,13 +7,7 @@ const router = express.Router();
 // router to update the user information
 router.patch("/user/:id", (req, res) => {
   // convert id from string to number
-  const id = Number(req.params.id);
-
-  // defensive check
-  if (Number.isNaN(id)) {
-    res.send({ status: 0, reason: "Invalid id" });
-    return;
-  }
+  const id = req.params.id;
 
   //   destructure user data
   const { users } = req.apiData;
@@ -25,7 +19,7 @@ router.patch("/user/:id", (req, res) => {
 
   // defensive check
   if (indexOf === -1) {
-    res.send({ status: 0, reason: "Id is not found" });
+    res.send({ status: 0, reason: "Id not found" });
     return;
   }
 
@@ -56,6 +50,14 @@ router.patch("/user/:id", (req, res) => {
   if (password && typeof password === "string") {
     users[indexOf].password = password;
   }
+
+  // additionally to validate with joi:
+  //   firstName
+  //   lastName
+  //   number
+  //   email
+  //   dob
+  //   password
 
   res.send({ status: 1, message: "User updated" });
 });
