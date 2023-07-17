@@ -1,5 +1,5 @@
 // importing express framework
-const myExpress = require("express");
+const express = require("express");
 
 // create instance of router
 const router = myExpress.Router();
