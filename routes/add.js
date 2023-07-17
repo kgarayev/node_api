@@ -25,6 +25,7 @@ router.post("/user", async (req, res) => {
 
   if (localErrors) {
     res.send({ status: 0, reason: "Incomplete or invalid request" });
+    return;
   }
 
   //   destructuring the body
@@ -59,6 +60,7 @@ router.post("/user", async (req, res) => {
   // defensive check
   if (!firstBoolean) {
     res.send({ status: 0, reason: "Incomplete or invalid request" });
+    return;
   }
 
   //   find the index if the user exists
@@ -73,6 +75,7 @@ router.post("/user", async (req, res) => {
   //   defensive check for duplicates
   if (indexOf > -1) {
     res.send({ status: 0, reason: "Duplicate entry" });
+    return;
   }
 
   //   push the data into the apiData whilst generating random id number and an empty accounts array

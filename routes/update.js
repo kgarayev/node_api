@@ -33,6 +33,7 @@ router.patch("/user/:id", async (req, res) => {
 
   if (localErrors) {
     res.send({ status: 0, reason: "Incomplete or invalid request" });
+    return;
   }
 
   //   destructuring the body
