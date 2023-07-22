@@ -178,7 +178,6 @@ const updateUser = {
   dob: joi
     .string()
     .pattern(/^(\d{2})\/(\d{2})\/(\d{4})$/)
-    .required()
     .custom((value, helpers) => {
       // split date into array [dd, mm, yyyy]
       const [day, month, year] = value.split("/").map(Number);

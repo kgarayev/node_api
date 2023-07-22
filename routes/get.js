@@ -33,6 +33,8 @@ router.get("/user/:id", async (req, res) => {
 
   console.log(results);
 
+  console.log(results);
+
   // check if the results are there
   if (results.length > 0) {
     res.send({ status: 1, results });

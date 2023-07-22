@@ -20,12 +20,23 @@ router.delete("/user/:id", async (req, res) => {
 
   try {
     // run the query
-    await asyncMySQL(`DELETE FROM users WHERE id LIKE ${id}`);
-    // send the successful update to the user
-    res.send({ status: 1, message: "User removed" });
+    const result = await asyncMySQL(`DELETE FROM users WHERE id LIKE ${id}`);
+
+    console.log(result);
+
+    // check if the id exists and the user has been removed
+    if (result.affectedRows === 1) {
+      // send the successful update to the user
+      res.send({ status: 1, message: "User removed" });
+      return;
+    }
+    // if not, notify the user
+    res.send({ status: 0, message: "Invalid id" });
+    return;
   } catch (error) {
     // catch the error
-    res.send({ status: 0, error });
+    res.send({ status: 0, reason: error.sqlMessage });
+    return;
   }
 });
 
