@@ -26,7 +26,7 @@ myApp.use(logging);
 // myApp.use(simpleAuth);
 
 // view users route middleware
-// myApp.use("/users", require("./routes/users"));
+myApp.use("/users", require("./routes/users"));
 
 // route middleware
 // myApp.use("/", require("./routes/demo"));
