@@ -8,17 +8,20 @@ const router = express.Router();
 const asyncMySQL = require("../database/connection");
 
 // route
-router.get("/:num", async (req, res) => {
+router.get("/", async (req, res) => {
   // log the headers of the request
   console.log("New request to: /", req.headers);
 
+  // destructuring the request queries
+  let { num } = req.query;
+
   // converting id from string to number
-  const num = Number(req.params.num);
+  num = Number(num);
 
   console.log(num);
 
   try {
-    const userQuantity = (await asyncMySQL(`SELECT COUNT(*) FROM users`))[0][
+    var userQuantity = (await asyncMySQL(`SELECT COUNT(*) FROM users`))[0][
       "COUNT(*)"
     ];
     console.log(userQuantity);
@@ -27,18 +30,21 @@ router.get("/:num", async (req, res) => {
     return;
   }
 
-  const userQuantity = (await asyncMySQL(`SELECT COUNT(*) FROM users`))[0][
-    "COUNT(*)"
-  ];
-
   // if a specific quantity is asked for
   if (num > 0 && num < userQuantity) {
     const results = await asyncMySQL(`SELECT * FROM users LIMIT ${num}`);
     res.send({ status: 1, results });
     return;
+  } else if (num === 0) {
+    res.send({ status: 1, message: "No users requested" });
+    return;
+  } else if (num < 0) {
+    res.send({ status: 0, message: "Invalid query" });
+    return;
   }
 
-  const results = await asyncMySQL(`SELECT * FROM users LIMIT ${num}`);
+  // otherwise, show all users
+  const results = await asyncMySQL(`SELECT * FROM users`);
 
   // send the response to the front
   res.send({ status: 1, results });
