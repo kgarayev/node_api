@@ -6,7 +6,7 @@ const logging = require("./middleware/logging");
 const simpleAuth = require("./middleware/simpleAuth");
 
 // importing api data
-const apiData = require("./apiData.json");
+// const apiData = require("./apiData.json");
 
 // importing the random id generator function
 const { genRandomString } = require("./utils/math");
@@ -15,9 +15,9 @@ const { genRandomString } = require("./utils/math");
 const myApp = express();
 
 // add the id into the api data
-apiData.users.forEach((user, index) => {
-  user.id = genRandomString();
-});
+// apiData.users.forEach((user, index) => {
+//   user.id = genRandomString();
+// });
 
 // Middleware section START
 
