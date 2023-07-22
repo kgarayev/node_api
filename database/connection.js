@@ -15,6 +15,7 @@ const myConnection = mysql.createConnection({
 // wrapping the query code in the promise to make it async await compatible
 // resolve if no error, reject if error
 // wrapping the drive inside a promise
+// returns an array
 const asyncMySQL = (query) => {
   return new Promise((resolve, reject) => {
     myConnection.query(query, (error, results) => {
