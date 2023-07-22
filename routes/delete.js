@@ -19,12 +19,14 @@ router.delete("/user/:id", async (req, res) => {
   }
 
   try {
+    // run the query
     await asyncMySQL(`DELETE FROM users WHERE id LIKE ${id}`);
+    // send the successful update to the user
+    res.send({ status: 1, message: "User removed" });
   } catch (error) {
+    // catch the error
     res.send({ status: 0, error });
   }
-
-  res.send({ status: 1, message: "User removed" });
 });
 
 module.exports = router;

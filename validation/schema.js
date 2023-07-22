@@ -64,6 +64,25 @@ const addUser = {
     .pattern(/^(\d{2})\/(\d{2})\/(\d{4})$/)
     .required()
     .custom((value, helpers) => {
+      // split date into array [dd, mm, yyyy]
+      const [day, month, year] = value.split("/").map(Number);
+
+      // verify month and day values
+      if (month < 1 || month > 12) {
+        return helpers.error("date.invalid.month");
+      }
+
+      // check if the day is valid for the month, accounting for leap years
+      if (day < 1 || day > new Date(year, month, 0).getDate()) {
+        return helpers.error("date.invalid.day");
+      }
+
+      // check year
+      if (year < 1900 || year > new Date().getFullYear()) {
+        return helpers.error("date.invalid.year");
+      }
+
+      // calculate age
       const currentDate = new Date();
       const birthDate = new Date(value);
       let age = currentDate - birthDate;
@@ -80,6 +99,9 @@ const addUser = {
       "string.empty": "date of birth is required",
       "string.pattern.base": "date of birth must be in the format dd/mm/yyyy",
       "any.custom": "age must be at least 18 years old",
+      "date.invalid.day": "date of birth contains an invalid day",
+      "date.invalid.month": "date of birth contains an invalid month",
+      "date.invalid.year": "date of birth contains an invalid year",
     }),
 
   password: joi
@@ -156,7 +178,27 @@ const updateUser = {
   dob: joi
     .string()
     .pattern(/^(\d{2})\/(\d{2})\/(\d{4})$/)
+    .required()
     .custom((value, helpers) => {
+      // split date into array [dd, mm, yyyy]
+      const [day, month, year] = value.split("/").map(Number);
+
+      // verify month and day values
+      if (month < 1 || month > 12) {
+        return helpers.error("date.invalid.month");
+      }
+
+      // check if the day is valid for the month, accounting for leap years
+      if (day < 1 || day > new Date(year, month, 0).getDate()) {
+        return helpers.error("date.invalid.day");
+      }
+
+      // check year
+      if (year < 1900 || year > new Date().getFullYear()) {
+        return helpers.error("date.invalid.year");
+      }
+
+      // calculate age
       const currentDate = new Date();
       const birthDate = new Date(value);
       let age = currentDate - birthDate;
@@ -173,6 +215,9 @@ const updateUser = {
       "string.empty": "date of birth is required",
       "string.pattern.base": "date of birth must be in the format dd/mm/yyyy",
       "any.custom": "age must be at least 18 years old",
+      "date.invalid.day": "date of birth contains an invalid day",
+      "date.invalid.month": "date of birth contains an invalid month",
+      "date.invalid.year": "date of birth contains an invalid year",
     }),
 
   password: joi

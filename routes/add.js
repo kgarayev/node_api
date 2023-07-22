@@ -5,6 +5,9 @@ const { connected } = require("process");
 // import router
 const router = express.Router();
 
+// import the sql query function
+const asyncMySQL = require("../database/connection");
+
 // importing the random id generator function
 const { genRandomString } = require("../utils/math");
 
@@ -13,16 +16,16 @@ const { validate } = require("../validation/index");
 
 // add user router
 router.post("/user", async (req, res) => {
+  // just console log the body
   console.log(req.body);
-
-  //   destructure users data from the apiData
-  const { users } = req.apiData;
 
   // validate
   let localErrors = await validate(req.body, "addUser");
 
+  // log local errors if any
   console.log(localErrors);
 
+  // notify about validation errors and abort if any
   if (localErrors) {
     res.send({ status: 0, reason: "Incomplete or invalid request" });
     return;
@@ -43,6 +46,7 @@ router.post("/user", async (req, res) => {
   //     currencyCountry,
   //   } = accounts[0];
 
+  // logical check (might be redundant due to the joi validator present . consider removing it)
   const firstBoolean =
     firstName &&
     typeof firstName === "string" &&
@@ -63,34 +67,18 @@ router.post("/user", async (req, res) => {
     return;
   }
 
-  //   find the index if the user exists
-  const indexOf = users.findIndex((user) => {
-    return (
-      (user.firstName === firstName && user.lastName === lastName) ||
-      user.number === number ||
-      user.email === email
+  // implementing the query
+  try {
+    await asyncMySQL(
+      `INSERT INTO users (first_name, last_name, number, email, dob, password) 
+              VALUES ("${firstName}", "${lastName}", "${number}", "${email}", STR_TO_DATE("${dob}", "%d/%m/%Y"), "${password}")`
     );
-  });
-
-  //   defensive check for duplicates
-  if (indexOf > -1) {
-    res.send({ status: 0, reason: "Duplicate entry" });
-    return;
+    // notifying the user of successful result
+    res.send({ status: 1, message: "User added" });
+  } catch (error) {
+    // error message to the front
+    res.send({ status: 0, error });
   }
-
-  //   push the data into the apiData whilst generating random id number and an empty accounts array
-  req.apiData.users.push({
-    id: genRandomString(),
-    firstName,
-    lastName,
-    number,
-    email,
-    dob,
-    password,
-    accounts: [],
-  });
-
-  res.send({ status: 1, message: "User added" });
 });
 
 module.exports = router;
