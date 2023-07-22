@@ -52,16 +52,3 @@ createDB("stash");
 
 // exporting the function to be used elsewhere on the project
 module.exports = asyncMySQL;
-
-// demo function to implement a number of queries
-// const demo = async () => {
-//   result1 = await asyncMySQL("SELECT * FROM users");
-//   result2 = await asyncMySQL("SELECT * FROM users");
-//   result3 = await asyncMySQL("SELECT * FROM users");
-//   result4 = await asyncMySQL("SELECT * FROM users");
-// };
-
-// callback version of the query (leads to callback hell if a lot of queries are executed )
-// myConnection.query("SELECT * FROM users", (error, results) => {
-//   console.log(error, results);
-// });

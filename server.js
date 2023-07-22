@@ -6,7 +6,7 @@ const logging = require("./middleware/logging");
 const simpleAuth = require("./middleware/simpleAuth");
 
 // importing the random id generator function
-// const { genRandomString } = require("./utils/math");
+const { genRandomString } = require("./utils/math");
 
 // creating a new instance of express
 const myApp = express();
@@ -35,13 +35,13 @@ myApp.use(logging);
 myApp.use("/get", require("./routes/get"));
 
 // delete route middleware
-// myApp.use("/delete", require("./routes/delete"));
+myApp.use("/delete", require("./routes/delete"));
 
 // // add route middleware
-// myApp.use("/add", require("./routes/add"));
+myApp.use("/add", require("./routes/add"));
 
 // // update route middleware
-// myApp.use("/update", require("./routes/update"));
+myApp.use("/update", require("./routes/update"));
 
 // Mddleware section FINISH
 
