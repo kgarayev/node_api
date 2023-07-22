@@ -16,6 +16,7 @@ router.get("/users", async (req, res) => {
   res.send({ status: 1, results });
 });
 
+// get a specific user router
 router.get("/user/:id", async (req, res) => {
   // convert id from string to number
   const id = Number(req.params.id);
@@ -38,7 +39,9 @@ router.get("/user/:id", async (req, res) => {
     return;
   }
 
+  // if the resuts are not there, communicate this
   res.send({ status: 0, reason: "Id not found" });
 });
 
+// exporting the router
 module.exports = router;
