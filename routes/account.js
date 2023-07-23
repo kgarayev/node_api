@@ -23,7 +23,7 @@ const {
 } = require("../database/queries");
 
 // GET ROUTE:
-// get a specific user router
+// get a specific account router
 router.get("/:id", async (req, res) => {
   // convert id from string to number
   const id = Number(req.params.id);
@@ -94,7 +94,7 @@ router.post("/", async (req, res) => {
         userId
       )
     );
-    // notifying the user of successful result
+    // notifying the front of successful result
     res.send({ status: 1, message: "Account added" });
     return;
   } catch (error) {
@@ -105,7 +105,7 @@ router.post("/", async (req, res) => {
 });
 
 // DELETE ROUTE:
-// delete a user router
+// delete an account router
 router.delete("/:id", async (req, res) => {
   // converting id from string to number
   const id = Number(req.params.id);
@@ -122,13 +122,13 @@ router.delete("/:id", async (req, res) => {
 
     console.log(result);
 
-    // check if the id exists and the user has been removed
+    // check if the id exists and the account has been removed
     if (result.affectedRows === 1) {
-      // send the successful update to the user
+      // send the successful update to the front
       res.send({ status: 1, message: "Account removed" });
       return;
     }
-    // if not, notify the user
+    // if not, notify the front
     res.send({ status: 0, message: "Invalid id" });
     return;
   } catch (error) {
@@ -139,7 +139,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 // UPDATE ROUTE:
-// router to update the user information
+// router to update the account information
 router.patch("/:id", async (req, res) => {
   // convert id from string to number
   const id = Number(req.params.id);
@@ -167,12 +167,12 @@ router.patch("/:id", async (req, res) => {
   } = req.body;
 
   try {
-    // First, check if user with this id exists
+    // First, check if account with this id exists
     const results = await asyncMySQL(
       `SELECT * FROM accounts WHERE id LIKE "${id}"`
     );
 
-    // If no user exists with this id, return an error
+    // If no account exists with this id, return an error
     if (results.length === 0) {
       res.send({ status: 0, message: "Invalid account id" });
       return;
@@ -227,7 +227,7 @@ router.patch("/:id", async (req, res) => {
       await asyncMySQL(updateQuery("accounts", "user_id", userId, id));
     }
 
-    // sending the final update to the user
+    // sending the final update to the front
     res.send({ status: 1, message: "Account updated" });
     return;
   } catch (error) {

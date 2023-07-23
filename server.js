@@ -40,7 +40,7 @@ myApp.use("/user", require("./routes/user"));
 myApp.use("/account", require("./routes/account"));
 
 // view transactions route middleware
-// myApp.use("/transaction", require("./routes/transaction"));
+myApp.use("/transaction", require("./routes/transaction"));
 
 // Mddleware section FINISH
 

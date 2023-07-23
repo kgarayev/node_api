@@ -38,7 +38,7 @@ module.exports = {
         id INT(11) PRIMARY KEY AUTO_INCREMENT UNIQUE,
         type VARCHAR(64) NOT NULL,
         details VARCHAR(64) NOT NULL,
-        date DATE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         amount DECIMAL(10, 2) NOT NULL,
         account_id INT(11) NOT NULL
     )`;
@@ -86,13 +86,13 @@ module.exports = {
   },
 
   //   add transaction query
-  addTransaction: (type, details, amount, account_id) => {
-    return `INSERT INTO users (type, details, amount, account_id) 
+  addTransaction: (type, details, amount, accountId) => {
+    return `INSERT INTO transactions (type, details, amount, account_id) 
             VALUES (
                 "${type}", 
                 "${details}", 
                 "${amount}", 
-                "${account_id}")`;
+                "${accountId}")`;
   },
 
   // GENERIC QUERIES:
