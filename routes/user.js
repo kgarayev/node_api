@@ -46,11 +46,7 @@ router.get("/:id", async (req, res) => {
 
   // ask sql for data
   // returns an array of results
-  const results = await asyncMySQL(`SELECT * FROM users WHERE id LIKE ${id}`);
-
-  console.log(results);
-
-  console.log(results);
+  const results = await asyncMySQL(getQuery("users", id));
 
   // check if the results are there
   if (results.length > 0) {
@@ -107,8 +103,7 @@ router.post("/", async (req, res) => {
   // implementing the query
   try {
     await asyncMySQL(
-      `INSERT INTO users (first_name, last_name, number, email, dob, password) 
-              VALUES ("${firstName}", "${lastName}", "${number}", "${email}", STR_TO_DATE("${dob}", "%d/%m/%Y"), "${password}")`
+      addUser(firstName, lastName, number, email, dob, password)
     );
     // notifying the user of successful result
     res.send({ status: 1, message: "User added" });
@@ -122,7 +117,7 @@ router.post("/", async (req, res) => {
 
 // DELETE ROUTE:
 // delete a user router
-router.delete("/user/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   // converting id from string to number
   const id = Number(req.params.id);
 
@@ -134,7 +129,7 @@ router.delete("/user/:id", async (req, res) => {
 
   try {
     // run the query
-    const result = await asyncMySQL(`DELETE FROM users WHERE id LIKE ${id}`);
+    const result = await asyncMySQL(deleteQuery("users", id));
 
     console.log(result);
 
@@ -156,7 +151,7 @@ router.delete("/user/:id", async (req, res) => {
 
 // UPDATE ROUTE:
 // router to update the user information
-router.patch("/user/:id", async (req, res) => {
+router.patch("/:id", async (req, res) => {
   // convert id from string to number
   const id = Number(req.params.id);
 
@@ -189,39 +184,27 @@ router.patch("/user/:id", async (req, res) => {
 
     //   for security we have repetition
     if (firstName && typeof firstName === "string") {
-      await asyncMySQL(
-        `UPDATE users SET first_name = "${firstName}" WHERE id LIKE "${id}"`
-      );
+      await asyncMySQL(updateQuery("users", "first_name", firstName, id));
     }
 
     if (lastName && typeof lastName === "string") {
-      await asyncMySQL(
-        `UPDATE users SET last_name = "${lastName}" WHERE id LIKE "${id}"`
-      );
+      await asyncMySQL(updateQuery("users", "last_name", lastName, id));
     }
 
     if (number && typeof Number(number) === "number") {
-      await asyncMySQL(
-        `UPDATE users SET number = "${number}" WHERE id LIKE "${id}"`
-      );
+      await asyncMySQL(updateQuery("users", "number", number, id));
     }
 
     if (email && typeof email === "string") {
-      await asyncMySQL(
-        `UPDATE users SET email = "${email}" WHERE id LIKE "${id}"`
-      );
+      await asyncMySQL(updateQuery("users", "email", email, id));
     }
 
     if (dob && typeof dob === "string") {
-      await asyncMySQL(
-        `UPDATE users SET dob = STR_TO_DATE("${dob}", "%d/%m/%Y") WHERE id LIKE "${id}"`
-      );
+      await asyncMySQL(updateQuery("users", "dob", dob, id));
     }
 
     if (password && typeof password === "string") {
-      await asyncMySQL(
-        `UPDATE users SET password = "${password}" WHERE id LIKE "${id}"`
-      );
+      await asyncMySQL(updateQuery("users", "password", password, id));
     }
     // sending the final update to the user
     res.send({ status: 1, message: "User updated" });
