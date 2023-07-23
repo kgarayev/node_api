@@ -236,7 +236,206 @@ const updateUser = {
     }),
 };
 
-module.exports = { addUser, updateUser };
+// add account
+const addAccount = {
+  accountName: joi.string().required().min(1).max(64).trim().messages({
+    "string.empty": "Account name is required",
+    "string.min": "Account name should have a minimum length of 1",
+    "string.max": "Account name should have a maximum length of 64",
+  }),
+
+  accountNumber: joi
+    .string()
+    .pattern(/^\d{8}$/)
+    .required()
+    .length(8)
+    .messages({
+      "string.empty": "Bank account number is required",
+      "string.pattern.base": "Bank account number must be 8 digits",
+    }),
+
+  sortCode: joi
+    .string()
+    .pattern(/^\d{6}$/)
+    .length(6)
+    .required()
+    .messages({
+      "string.empty": "Sort code is required",
+      "string.pattern.base": "Sort code must be a valid UK sort code",
+    }),
+
+  currencyCode: joi.string().required().length(3).trim().messages({
+    "string.empty": "Currency code is required",
+    "string.length": "Currency code should be 3 characters",
+  }),
+
+  currencyName: joi.string().required().min(1).max(64).trim().messages({
+    "string.empty": "Currency name is required",
+    "string.min": "Currency name should have a minimum length of 1",
+    "string.max": "Currency name should have a maximum length of 64",
+  }),
+
+  currencySymbol: joi.string().required().min(1).max(2).trim().messages({
+    "string.empty": "Currency symbol is required",
+    "string.min": "Currency symbol should have a minimum length of 1",
+    "string.max": "Currency symbol should have a maximum length of 2",
+  }),
+
+  currencyCountry: joi.string().required().min(1).max(64).trim().messages({
+    "string.empty": "Currency country is required",
+    "string.min": "Currency country should have a minimum length of 1",
+    "string.max": "Currency country should have a maximum length of 64",
+  }),
+
+  balance: joi
+    .string()
+    .required()
+    .pattern(/^\d+(\.\d{1,2})?$/) // Allows positive decimal numbers with up to 2 decimal places
+    .messages({
+      "string.empty": "Balance is required",
+      "string.pattern.base":
+        "Balance must be a valid decimal number with up to 2 decimal places",
+    }),
+
+  userId: joi.number().integer().required().min(1).messages({
+    "number.base": "User ID must be a number",
+    "number.empty": "User ID is required",
+    "number.min": "User ID should be a positive integer",
+  }),
+};
+
+// update account
+const updateAccount = {
+  accountName: joi.string().min(1).max(64).trim().messages({
+    "string.empty": "Account name is required",
+    "string.min": "Account name should have a minimum length of 1",
+    "string.max": "Account name should have a maximum length of 64",
+  }),
+
+  accountNumber: joi
+    .string()
+    .pattern(/^\d{8}$/)
+    .length(8)
+    .messages({
+      "string.empty": "Bank account number is required",
+      "string.pattern.base": "Bank account number must be 8 digits",
+    }),
+
+  sortCode: joi
+    .string()
+    .pattern(/^\d{6}$/)
+    .length(6)
+    .messages({
+      "string.empty": "Sort code is required",
+      "string.pattern.base": "Sort code must be a valid UK sort code",
+    }),
+
+  currencyCode: joi.string().length(3).trim().messages({
+    "string.empty": "Currency code is required",
+    "string.length": "Currency code should be 3 characters",
+  }),
+
+  currencyName: joi.string().min(1).max(64).trim().messages({
+    "string.empty": "Currency name is required",
+    "string.min": "Currency name should have a minimum length of 1",
+    "string.max": "Currency name should have a maximum length of 64",
+  }),
+
+  currencySymbol: joi.string().min(1).max(2).trim().messages({
+    "string.empty": "Currency symbol is required",
+    "string.min": "Currency symbol should have a minimum length of 1",
+    "string.max": "Currency symbol should have a maximum length of 2",
+  }),
+
+  currencyCountry: joi.string().min(1).max(64).trim().messages({
+    "string.empty": "Currency country is required",
+    "string.min": "Currency country should have a minimum length of 1",
+    "string.max": "Currency country should have a maximum length of 64",
+  }),
+
+  balance: joi
+    .string()
+    .pattern(/^\d+(\.\d{1,2})?$/) // Allows positive decimal numbers with up to 2 decimal places
+    .messages({
+      "string.empty": "Balance is required",
+      "string.pattern.base":
+        "Balance must be a valid decimal number with up to 2 decimal places",
+    }),
+
+  userId: joi.number().integer().min(1).messages({
+    "number.base": "User ID must be a number",
+    "number.empty": "User ID is required",
+    "number.min": "User ID should be a positive integer",
+  }),
+};
+
+// Schema for adding transactions
+const addTransaction = {
+  type: joi.string().required().trim().max(64).messages({
+    "string.empty": "Transaction type is required",
+    "string.max": "Transaction type cannot be more than 64 characters",
+  }),
+
+  details: joi.string().required().trim().max(64).messages({
+    "string.empty": "Transaction details are required",
+    "string.max": "Transaction details cannot be more than 64 characters",
+  }),
+
+  amount: joi
+    .string()
+    .required()
+    .pattern(/^\d+(\.\d{1,2})?$/) // Allows positive decimal numbers with up to 2 decimal places
+    .messages({
+      "string.empty": "Amount is required",
+      "string.pattern.base":
+        "Amount must be a valid decimal number with up to 2 decimal places",
+    }),
+
+  accountId: joi.number().integer().required().min(1).messages({
+    "number.base": "Account ID must be a number",
+    "number.empty": "Account ID is required",
+    "number.min": "Account ID should be a positive integer",
+    "number.integer": "Account ID must be an integer",
+  }),
+};
+
+// Schema for updating transactions
+const updateTransaction = {
+  type: joi.string().trim().max(64).messages({
+    "string.empty": "Transaction type is required",
+    "string.max": "Transaction type cannot be more than 64 characters",
+  }),
+
+  details: joi.string().trim().max(64).messages({
+    "string.empty": "Transaction details are required",
+    "string.max": "Transaction details cannot be more than 64 characters",
+  }),
+
+  amount: joi
+    .string()
+    .pattern(/^\d+(\.\d{1,2})?$/) // Allows positive decimal numbers with up to 2 decimal places
+    .messages({
+      "string.empty": "Amount is required",
+      "string.pattern.base":
+        "Amount must be a valid decimal number with up to 2 decimal places",
+    }),
+
+  accountId: joi.number().integer().min(1).messages({
+    "number.base": "Account ID must be a number",
+    "number.empty": "Account ID is required",
+    "number.min": "Account ID should be a positive integer",
+    "number.integer": "Account ID must be an integer",
+  }),
+};
+
+module.exports = {
+  addUser,
+  updateUser,
+  addAccount,
+  updateAccount,
+  addTransaction,
+  updateTransaction,
+};
 
 // FOR LATER USE:
 

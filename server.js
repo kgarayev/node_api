@@ -37,7 +37,7 @@ myApp.use("/users", require("./routes/users"));
 myApp.use("/user", require("./routes/user"));
 
 // view accounts route middleware
-// myApp.use("/account", require("./routes/account"));
+myApp.use("/account", require("./routes/account"));
 
 // view transactions route middleware
 // myApp.use("/transaction", require("./routes/transaction"));

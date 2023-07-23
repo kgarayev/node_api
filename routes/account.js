@@ -16,21 +16,11 @@ const asyncMySQL = require("../database/connection");
 
 // import queries
 const {
-  addUser,
+  addAccount,
   deleteQuery,
   updateQuery,
   getQuery,
 } = require("../database/queries");
-
-// GET ROUTE:
-// get user router
-router.get("/", async (req, res) => {
-  // ask sql for data
-  // returns an array of results
-  const results = await asyncMySQL(`SELECT * FROM users`);
-
-  res.send({ status: 1, results });
-});
 
 // GET ROUTE:
 // get a specific user router
@@ -46,7 +36,7 @@ router.get("/:id", async (req, res) => {
 
   // ask sql for data
   // returns an array of results
-  const results = await asyncMySQL(getQuery("users", id));
+  const results = await asyncMySQL(getQuery("accounts", id));
 
   // check if the results are there
   if (results.length > 0) {
@@ -59,13 +49,13 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST ROUTE:
-// add user router
+// add account router
 router.post("/", async (req, res) => {
   // just console log the body
   console.log(req.body);
 
   // validate
-  let localErrors = await validate(req.body, "addUser");
+  let localErrors = await validate(req.body, "addAccount");
 
   // log local errors if any
   console.log(localErrors);
@@ -77,15 +67,35 @@ router.post("/", async (req, res) => {
   }
 
   //   destructuring the body
-  const { firstName, lastName, number, email, dob, password } = req.body;
+  const {
+    accountName,
+    accountNumber,
+    sortCode,
+    currencyCode,
+    currencyName,
+    currencySymbol,
+    currencyCountry,
+    balance,
+    userId,
+  } = req.body;
 
   // implementing the query
   try {
     await asyncMySQL(
-      addUser(firstName, lastName, number, email, dob, password)
+      addAccount(
+        accountName,
+        accountNumber,
+        sortCode,
+        currencyCode,
+        currencyName,
+        currencySymbol,
+        currencyCountry,
+        balance,
+        userId
+      )
     );
     // notifying the user of successful result
-    res.send({ status: 1, message: "User added" });
+    res.send({ status: 1, message: "Account added" });
     return;
   } catch (error) {
     // error message to the front
@@ -108,14 +118,14 @@ router.delete("/:id", async (req, res) => {
 
   try {
     // run the query
-    const result = await asyncMySQL(deleteQuery("users", id));
+    const result = await asyncMySQL(deleteQuery("accounts", id));
 
     console.log(result);
 
     // check if the id exists and the user has been removed
     if (result.affectedRows === 1) {
       // send the successful update to the user
-      res.send({ status: 1, message: "User removed" });
+      res.send({ status: 1, message: "Account removed" });
       return;
     }
     // if not, notify the user
@@ -135,10 +145,7 @@ router.patch("/:id", async (req, res) => {
   const id = Number(req.params.id);
 
   // validate
-  let localErrors = await validate(req.body, "updateUser");
-
-  // logging local errors
-  // console.log(localErrors);
+  let localErrors = await validate(req.body, "updateAccount");
 
   // checking if local errors exist
   if (localErrors) {
@@ -147,46 +154,81 @@ router.patch("/:id", async (req, res) => {
   }
 
   //   destructuring the body
-  const { firstName, lastName, number, email, dob, password } = req.body;
+  const {
+    accountName,
+    accountNumber,
+    sortCode,
+    currencyCode,
+    currencyName,
+    currencySymbol,
+    currencyCountry,
+    balance,
+    userId,
+  } = req.body;
 
   try {
     // First, check if user with this id exists
     const results = await asyncMySQL(
-      `SELECT * FROM users WHERE id LIKE "${id}"`
+      `SELECT * FROM accounts WHERE id LIKE "${id}"`
     );
 
     // If no user exists with this id, return an error
     if (results.length === 0) {
-      res.send({ status: 0, message: "Invalid user id" });
+      res.send({ status: 0, message: "Invalid account id" });
       return;
     }
 
     //   for security we have repetition
-    if (firstName && typeof firstName === "string") {
-      await asyncMySQL(updateQuery("users", "first_name", firstName, id));
+    if (accountName && typeof accountName === "string") {
+      await asyncMySQL(
+        updateQuery("accounts", "account_name", accountName, id)
+      );
     }
 
-    if (lastName && typeof lastName === "string") {
-      await asyncMySQL(updateQuery("users", "last_name", lastName, id));
+    if (accountNumber && typeof accountNumber === "number") {
+      await asyncMySQL(
+        updateQuery("accounts", "account_number", accountNumber, id)
+      );
     }
 
-    if (number && typeof Number(number) === "number") {
-      await asyncMySQL(updateQuery("users", "number", number, id));
+    if (sortCode && typeof sortCode === "number") {
+      await asyncMySQL(updateQuery("accounts", "sort_code", sortCode, id));
     }
 
-    if (email && typeof email === "string") {
-      await asyncMySQL(updateQuery("users", "email", email, id));
+    if (currencyCode && typeof currencyCode === "string") {
+      await asyncMySQL(
+        updateQuery("accounts", "currency_code", currencyCode, id)
+      );
     }
 
-    if (dob && typeof dob === "string") {
-      await asyncMySQL(updateQuery("users", "dob", dob, id));
+    if (currencyName && typeof currencyName === "string") {
+      await asyncMySQL(
+        updateQuery("accounts", "currency_name", currencyName, id)
+      );
     }
 
-    if (password && typeof password === "string") {
-      await asyncMySQL(updateQuery("users", "password", password, id));
+    if (currencySymbol && typeof currencySymbol === "string") {
+      await asyncMySQL(
+        updateQuery("accounts", "currency_symbol", currencySymbol, id)
+      );
     }
+
+    if (currencyCountry && typeof currencyCountry === "string") {
+      await asyncMySQL(
+        updateQuery("accounts", "currency_country", currencyCountry, id)
+      );
+    }
+
+    if (balance && typeof balance === "number") {
+      await asyncMySQL(updateQuery("accounts", "balance", balance, id));
+    }
+
+    if (userId && typeof userId === "number") {
+      await asyncMySQL(updateQuery("accounts", "user_id", userId, id));
+    }
+
     // sending the final update to the user
-    res.send({ status: 1, message: "User updated" });
+    res.send({ status: 1, message: "Account updated" });
     return;
   } catch (error) {
     // catch errors if any
