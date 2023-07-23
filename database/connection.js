@@ -78,15 +78,5 @@ createDB("stash")
     console.error("An error occured while creating the database:", error);
   });
 
-// create table function
-// const createTable = async (queryFunc) => {
-//   try {
-//     // create users table
-//     await asyncMySQL(queryFunc());
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
 // exporting the function to be used elsewhere on the project
 module.exports = asyncMySQL;

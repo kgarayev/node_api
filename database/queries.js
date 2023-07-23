@@ -43,4 +43,71 @@ module.exports = {
         account_id INT(11) NOT NULL
     )`;
   },
+
+  //   add user query
+  addUser: (firstName, lastName, number, email, dob, password_hash) => {
+    return `INSERT INTO users (first_name, last_name, number, email, dob, password) 
+            VALUES (
+                "${firstName}", 
+                "${lastName}", 
+                "${number}", 
+                "${email}", 
+                STR_TO_DATE("${dob}", "%d/%m/%Y"), 
+                "${password_hash}")`;
+  },
+
+  //   add account query
+  addAccount: (
+    accountName,
+    accountNumber,
+    sortCode,
+    currencyCode,
+    currencyName,
+    currencySymbol,
+    currencyCountry,
+    balance,
+    userId
+  ) => {
+    return `INSERT INTO accounts (
+                    account_name, account_number, 
+                    sort_code, currency_code, 
+                    currency_name, currency_symbol, 
+                    currency_country, balance, user_id) 
+                        VALUES (
+                            "${accountName}", 
+                            "${accountNumber}", 
+                            "${sortCode}", 
+                            "${currencyCode}", 
+                            "${currencyName}",
+                            "${currencySymbol}",
+                            "${currencyCountry}",
+                            "${balance}",
+                            "${userId}")`;
+  },
+
+  //   add transaction query
+  addTransaction: (type, details, amount, account_id) => {
+    return `INSERT INTO users (type, details, amount, account_id) 
+            VALUES (
+                "${type}", 
+                "${details}", 
+                "${amount}", 
+                "${account_id}")`;
+  },
+
+  // GENERIC QUERIES:
+  //  a generic remove/delete query
+  deleteQuery: (dbName, id) => {
+    return `DELETE FROM ${dbName} WHERE id LIKE ${id}`;
+  },
+
+  //   a generic update query
+  updateQuery: (dbName, dbColumn, newValue, id) => {
+    return `UPDATE ${dbName} SET ${dbColumn} = "${newValue}" WHERE id LIKE "${id}"`;
+  },
+
+  //   a generic get/select query
+  getQuery: (dbName, id) => {
+    return `SELECT * FROM ${dbName} WHERE id LIKE ${id}`;
+  },
 };
