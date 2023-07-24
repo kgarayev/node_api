@@ -75,8 +75,8 @@ const validate = async (payload: Payload, type: string) => {
     const results = await option.validateAsync(payload, { abortEarly: false });
     return null;
   } catch (errors) {
-    const errorsModified = {};
-    errors.details.forEach((error: ValidationErrorItem) => {
+    const errorsModified: any = {};
+    (errors as any).details.forEach((error: ValidationErrorItem) => {
       const key = error.context?.key;
       if (key) {
         errorsModified[key] = error.message;

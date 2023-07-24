@@ -85,9 +85,10 @@ const addUser = {
       // calculate age
       const currentDate = new Date();
       const birthDate = new Date(value);
-      let age = currentDate - birthDate;
+      let ageInMillis = currentDate.getTime() - birthDate.getTime();
 
-      age = Math.floor(age / (1000 * 60 * 60 * 24 * 365.25));
+      const millisecondsInYear = 1000 * 60 * 60 * 24 * 365.25;
+      let age = Math.floor(ageInMillis / millisecondsInYear);
 
       if (age < 18) {
         return helpers.error("any.custom");
@@ -200,9 +201,10 @@ const updateUser = {
       // calculate age
       const currentDate = new Date();
       const birthDate = new Date(value);
-      let age = currentDate - birthDate;
+      let ageInMillis = currentDate.getTime() - birthDate.getTime();
 
-      age = Math.floor(age / (1000 * 60 * 60 * 24 * 365.25));
+      const millisecondsInYear = 1000 * 60 * 60 * 24 * 365.25;
+      let age = Math.floor(ageInMillis / millisecondsInYear);
 
       if (age < 18) {
         return helpers.error("any.custom");

@@ -123,7 +123,7 @@ router.post("/", async (req, res) => {
     return;
   } catch (error) {
     // error message to the front
-    res.send({ status: 0, reason: error.sqlMessage });
+    res.send({ status: 0, reason: (error as any)?.sqlMessage });
     return;
   }
 });
@@ -157,7 +157,7 @@ router.delete("/:id", async (req, res) => {
     return;
   } catch (error) {
     // catch the error
-    res.send({ status: 0, reason: error.sqlMessage });
+    res.send({ status: 0, reason: (error as any)?.sqlMessage });
     return;
   }
 });
@@ -256,7 +256,7 @@ router.patch("/:id", async (req, res) => {
     return;
   } catch (error) {
     // catch errors if any
-    res.send({ status: 0, reason: error.sqlMessage });
+    res.send({ status: 0, reason: (error as any)?.sqlMessage });
     return;
   }
 });

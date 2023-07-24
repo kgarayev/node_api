@@ -44,7 +44,7 @@ router.get("/", async (req, res) => {
 
   try {
     var userQuantity = (
-      (await asyncMySQL(`SELECT COUNT(*) FROM users`)) as DatabaseEntry[]
+      (await asyncMySQL(`SELECT COUNT(*) FROM users`)) as any
     )[0]["COUNT(*)"];
     console.log(userQuantity);
   } catch (error) {
