@@ -2,17 +2,23 @@
 import express from "express";
 
 // import middleware functions
-import logging from ("./middleware/logging")
-import simpleAuth from "./middleware/simpleAuth";
+// import logging from ("./middleware/logging")
+// import simpleAuth from "./middleware/simpleAuth";
 
 // importing the random id generator function
-import { genRandomString } from "./utils/math";
+// import { genRandomString } from "./utils/math";
+
+// to temporarily fix an error
+import cors from "cors";
+
+// importing routes
+// import users from "./routes/users";
+// import user from "./routes/user";
+// import account from "./routes/account";
+// import transaction from "./routes/transaction";
 
 // creating a new instance of express
 const myApp = express();
-
-// to temporarily fix an error
-const cors = require("cors");
 
 // Middleware section START
 
@@ -25,22 +31,22 @@ myApp.use(cors()); //just fixes it for now!!!
 myApp.use(express.json());
 
 // a logging middleware
-myApp.use(logging);
+// myApp.use(logging);
 
 // API KEY validation middleware
 // myApp.use(simpleAuth);
 
 // view users route middleware
-myApp.use("/users", require("./routes/users"));
+// myApp.use("/users", users);
 
 // view user route middleware
-myApp.use("/user", require("./routes/user"));
+// myApp.use("/user", user);
 
 // view accounts route middleware
-myApp.use("/account", require("./routes/account"));
+// myApp.use("/account", account);
 
 // view transactions route middleware
-myApp.use("/transaction", require("./routes/transaction"));
+// myApp.use("/transaction", transaction);
 
 // Mddleware section FINISH
 
