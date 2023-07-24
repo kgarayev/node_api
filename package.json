@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.ts"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -16,5 +16,10 @@
     "joi": "^17.9.2",
     "morgan": "~1.9.1",
     "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
   }
 }
