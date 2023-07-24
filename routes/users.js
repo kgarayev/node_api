@@ -44,7 +44,13 @@ router.get("/", async (req, res) => {
   }
 
   // otherwise, show all users
-  const results = await asyncMySQL(`SELECT * FROM users`);
+  const results = await asyncMySQL(
+    `SELECT * FROM users 
+      LEFT JOIN accounts 
+        ON users.id=accounts.user_id 
+          LEFT JOIN transactions 
+            ON accounts.id=transactions.account_id`
+  );
 
   // send the response to the front
   res.send({ status: 1, results });
