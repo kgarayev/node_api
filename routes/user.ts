@@ -17,7 +17,7 @@ import { asyncMySQL } from "../database/connection";
 // import queries
 import { queries } from "../database/queries";
 
-const { addAccount, deleteQuery, updateQuery, getQuery } = queries;
+const { addUser, deleteQuery, updateQuery, getQuery } = queries;
 
 interface DatabaseEntry {
   id?: number;
@@ -45,7 +45,17 @@ interface DatabaseEntry {
 }
 
 // GET ROUTE:
-// get a specific account router
+// get user router
+router.get("/", async (req, res) => {
+  // ask sql for data
+  // returns an array of results
+  const results = await asyncMySQL(`SELECT * FROM users`);
+
+  res.send({ status: 1, results });
+});
+
+// GET ROUTE:
+// get a specific user router
 router.get("/:id", async (req, res) => {
   // convert id from string to number
   const id = Number(req.params.id);
@@ -58,9 +68,7 @@ router.get("/:id", async (req, res) => {
 
   // ask sql for data
   // returns an array of results
-  const results = (await asyncMySQL(
-    getQuery("accounts", id)
-  )) as DatabaseEntry[];
+  const results = (await asyncMySQL(getQuery("users", id))) as DatabaseEntry[];
 
   // check if the results are there
   if (results.length > 0) {
@@ -73,13 +81,13 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST ROUTE:
-// add account router
+// add user router
 router.post("/", async (req, res) => {
   // just console log the body
   console.log(req.body);
 
   // validate
-  let localErrors = await validate(req.body, "addAccount");
+  let localErrors = await validate(req.body, "addUser");
 
   // log local errors if any
   console.log(localErrors);
@@ -91,35 +99,15 @@ router.post("/", async (req, res) => {
   }
 
   //   destructuring the body
-  const {
-    accountName,
-    accountNumber,
-    sortCode,
-    currencyCode,
-    currencyName,
-    currencySymbol,
-    currencyCountry,
-    balance,
-    userId,
-  } = req.body;
+  const { firstName, lastName, number, email, dob, password } = req.body;
 
   // implementing the query
   try {
     await asyncMySQL(
-      addAccount(
-        accountName,
-        accountNumber,
-        sortCode,
-        currencyCode,
-        currencyName,
-        currencySymbol,
-        currencyCountry,
-        balance,
-        userId
-      )
+      addUser(firstName, lastName, number, email, dob, password)
     );
-    // notifying the front of successful result
-    res.send({ status: 1, message: "Account added" });
+    // notifying the user of successful result
+    res.send({ status: 1, message: "User added" });
     return;
   } catch (error) {
     // error message to the front
@@ -129,7 +117,7 @@ router.post("/", async (req, res) => {
 });
 
 // DELETE ROUTE:
-// delete an account router
+// delete a user router
 router.delete("/:id", async (req, res) => {
   // converting id from string to number
   const id = Number(req.params.id);
@@ -142,17 +130,17 @@ router.delete("/:id", async (req, res) => {
 
   try {
     // run the query
-    const result = (await asyncMySQL(deleteQuery("accounts", id))) as any;
+    const result = (await asyncMySQL(deleteQuery("users", id))) as any;
 
     console.log(result);
 
-    // check if the id exists and the account has been removed
+    // check if the id exists and the user has been removed
     if (result.affectedRows === 1) {
-      // send the successful update to the front
-      res.send({ status: 1, message: "Account removed" });
+      // send the successful update to the user
+      res.send({ status: 1, message: "User removed" });
       return;
     }
-    // if not, notify the front
+    // if not, notify the user
     res.send({ status: 0, message: "Invalid id" });
     return;
   } catch (error) {
@@ -163,13 +151,16 @@ router.delete("/:id", async (req, res) => {
 });
 
 // UPDATE ROUTE:
-// router to update the account information
+// router to update the user information
 router.patch("/:id", async (req, res) => {
   // convert id from string to number
   const id = Number(req.params.id);
 
   // validate
-  let localErrors = await validate(req.body, "updateAccount");
+  let localErrors = await validate(req.body, "updateUser");
+
+  // logging local errors
+  // console.log(localErrors);
 
   // checking if local errors exist
   if (localErrors) {
@@ -178,81 +169,46 @@ router.patch("/:id", async (req, res) => {
   }
 
   //   destructuring the body
-  const {
-    accountName,
-    accountNumber,
-    sortCode,
-    currencyCode,
-    currencyName,
-    currencySymbol,
-    currencyCountry,
-    balance,
-    userId,
-  } = req.body;
+  const { firstName, lastName, number, email, dob, password } = req.body;
 
   try {
-    // First, check if account with this id exists
+    // First, check if user with this id exists
     const results = (await asyncMySQL(
-      `SELECT * FROM accounts WHERE id LIKE "${id}"`
+      `SELECT * FROM users WHERE id LIKE "${id}"`
     )) as DatabaseEntry[];
 
-    // If no account exists with this id, return an error
+    // If no user exists with this id, return an error
     if (results.length === 0) {
-      res.send({ status: 0, message: "Invalid account id" });
+      res.send({ status: 0, message: "Invalid user id" });
       return;
     }
 
     //   for security we have repetition
-    if (accountName && typeof accountName === "string") {
-      await asyncMySQL(
-        updateQuery("accounts", "account_name", accountName, id)
-      );
+    if (firstName && typeof firstName === "string") {
+      await asyncMySQL(updateQuery("users", "first_name", firstName, id));
     }
 
-    if (accountNumber && typeof Number(accountNumber) === "number") {
-      await asyncMySQL(
-        updateQuery("accounts", "account_number", accountNumber, id)
-      );
+    if (lastName && typeof lastName === "string") {
+      await asyncMySQL(updateQuery("users", "last_name", lastName, id));
     }
 
-    if (sortCode && typeof Number(sortCode) === "number") {
-      await asyncMySQL(updateQuery("accounts", "sort_code", sortCode, id));
+    if (number && typeof Number(number) === "number") {
+      await asyncMySQL(updateQuery("users", "number", number, id));
     }
 
-    if (currencyCode && typeof currencyCode === "string") {
-      await asyncMySQL(
-        updateQuery("accounts", "currency_code", currencyCode, id)
-      );
+    if (email && typeof email === "string") {
+      await asyncMySQL(updateQuery("users", "email", email, id));
     }
 
-    if (currencyName && typeof currencyName === "string") {
-      await asyncMySQL(
-        updateQuery("accounts", "currency_name", currencyName, id)
-      );
+    if (dob && typeof dob === "string") {
+      await asyncMySQL(updateQuery("users", "dob", dob, id));
     }
 
-    if (currencySymbol && typeof currencySymbol === "string") {
-      await asyncMySQL(
-        updateQuery("accounts", "currency_symbol", currencySymbol, id)
-      );
+    if (password && typeof password === "string") {
+      await asyncMySQL(updateQuery("users", "password", password, id));
     }
-
-    if (currencyCountry && typeof currencyCountry === "string") {
-      await asyncMySQL(
-        updateQuery("accounts", "currency_country", currencyCountry, id)
-      );
-    }
-
-    if (balance && typeof Number(balance) === "number") {
-      await asyncMySQL(updateQuery("accounts", "balance", balance, id));
-    }
-
-    if (userId && typeof Number(userId) === "number") {
-      await asyncMySQL(updateQuery("accounts", "user_id", userId, id));
-    }
-
-    // sending the final update to the front
-    res.send({ status: 1, message: "Account updated" });
+    // sending the final update to the user
+    res.send({ status: 1, message: "User updated" });
     return;
   } catch (error) {
     // catch errors if any

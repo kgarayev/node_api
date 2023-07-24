@@ -17,7 +17,7 @@ import { asyncMySQL } from "../database/connection";
 // import queries
 import { queries } from "../database/queries";
 
-const { addAccount, deleteQuery, updateQuery, getQuery } = queries;
+const { addTransaction, deleteQuery, updateQuery, getQuery } = queries;
 
 interface DatabaseEntry {
   id?: number;
@@ -45,7 +45,7 @@ interface DatabaseEntry {
 }
 
 // GET ROUTE:
-// get a specific account router
+// get a specific transaction router
 router.get("/:id", async (req, res) => {
   // convert id from string to number
   const id = Number(req.params.id);
@@ -59,7 +59,7 @@ router.get("/:id", async (req, res) => {
   // ask sql for data
   // returns an array of results
   const results = (await asyncMySQL(
-    getQuery("accounts", id)
+    getQuery("transactions", id)
   )) as DatabaseEntry[];
 
   // check if the results are there
@@ -73,13 +73,13 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST ROUTE:
-// add account router
+// add transaction router
 router.post("/", async (req, res) => {
   // just console log the body
   console.log(req.body);
 
   // validate
-  let localErrors = await validate(req.body, "addAccount");
+  let localErrors = await validate(req.body, "addTransaction");
 
   // log local errors if any
   console.log(localErrors);
@@ -91,35 +91,13 @@ router.post("/", async (req, res) => {
   }
 
   //   destructuring the body
-  const {
-    accountName,
-    accountNumber,
-    sortCode,
-    currencyCode,
-    currencyName,
-    currencySymbol,
-    currencyCountry,
-    balance,
-    userId,
-  } = req.body;
+  const { type, details, amount, accountId } = req.body;
 
   // implementing the query
   try {
-    await asyncMySQL(
-      addAccount(
-        accountName,
-        accountNumber,
-        sortCode,
-        currencyCode,
-        currencyName,
-        currencySymbol,
-        currencyCountry,
-        balance,
-        userId
-      )
-    );
+    await asyncMySQL(addTransaction(type, details, amount, accountId));
     // notifying the front of successful result
-    res.send({ status: 1, message: "Account added" });
+    res.send({ status: 1, message: "Transaction added" });
     return;
   } catch (error) {
     // error message to the front
@@ -129,7 +107,7 @@ router.post("/", async (req, res) => {
 });
 
 // DELETE ROUTE:
-// delete an account router
+// delete a transaction router
 router.delete("/:id", async (req, res) => {
   // converting id from string to number
   const id = Number(req.params.id);
@@ -142,14 +120,14 @@ router.delete("/:id", async (req, res) => {
 
   try {
     // run the query
-    const result = (await asyncMySQL(deleteQuery("accounts", id))) as any;
+    const result = (await asyncMySQL(deleteQuery("transactions", id))) as any;
 
     console.log(result);
 
-    // check if the id exists and the account has been removed
+    // check if the id exists and the transaction has been removed
     if (result.affectedRows === 1) {
       // send the successful update to the front
-      res.send({ status: 1, message: "Account removed" });
+      res.send({ status: 1, message: "Transaction removed" });
       return;
     }
     // if not, notify the front
@@ -163,13 +141,16 @@ router.delete("/:id", async (req, res) => {
 });
 
 // UPDATE ROUTE:
-// router to update the account information
+// router to update the transaction information
 router.patch("/:id", async (req, res) => {
   // convert id from string to number
   const id = Number(req.params.id);
 
   // validate
-  let localErrors = await validate(req.body, "updateAccount");
+  let localErrors = await validate(req.body, "updateTransaction");
+
+  // logging local errors
+  // console.log(localErrors);
 
   // checking if local errors exist
   if (localErrors) {
@@ -178,81 +159,41 @@ router.patch("/:id", async (req, res) => {
   }
 
   //   destructuring the body
-  const {
-    accountName,
-    accountNumber,
-    sortCode,
-    currencyCode,
-    currencyName,
-    currencySymbol,
-    currencyCountry,
-    balance,
-    userId,
-  } = req.body;
+  const { type, details, amount, accountId } = req.body;
 
   try {
-    // First, check if account with this id exists
+    // First, check if transaction with this id exists
     const results = (await asyncMySQL(
-      `SELECT * FROM accounts WHERE id LIKE "${id}"`
+      `SELECT * FROM transactions WHERE id LIKE "${id}"`
     )) as DatabaseEntry[];
 
-    // If no account exists with this id, return an error
+    // If no transaction exists with this id, return an error
     if (results.length === 0) {
-      res.send({ status: 0, message: "Invalid account id" });
+      res.send({ status: 0, message: "Invalid transaction id" });
       return;
     }
 
     //   for security we have repetition
-    if (accountName && typeof accountName === "string") {
+    if (type && typeof type === "string") {
+      await asyncMySQL(updateQuery("transactions", "type", type, id));
+    }
+
+    if (details && typeof details === "string") {
+      await asyncMySQL(updateQuery("transactions", "details", details, id));
+    }
+
+    if (amount && typeof Number(amount) === "number") {
+      await asyncMySQL(updateQuery("transactions", "amount", amount, id));
+    }
+
+    if (accountId && typeof Number(accountId) === "number") {
       await asyncMySQL(
-        updateQuery("accounts", "account_name", accountName, id)
+        updateQuery("transactions", "account_id", accountId, id)
       );
-    }
-
-    if (accountNumber && typeof Number(accountNumber) === "number") {
-      await asyncMySQL(
-        updateQuery("accounts", "account_number", accountNumber, id)
-      );
-    }
-
-    if (sortCode && typeof Number(sortCode) === "number") {
-      await asyncMySQL(updateQuery("accounts", "sort_code", sortCode, id));
-    }
-
-    if (currencyCode && typeof currencyCode === "string") {
-      await asyncMySQL(
-        updateQuery("accounts", "currency_code", currencyCode, id)
-      );
-    }
-
-    if (currencyName && typeof currencyName === "string") {
-      await asyncMySQL(
-        updateQuery("accounts", "currency_name", currencyName, id)
-      );
-    }
-
-    if (currencySymbol && typeof currencySymbol === "string") {
-      await asyncMySQL(
-        updateQuery("accounts", "currency_symbol", currencySymbol, id)
-      );
-    }
-
-    if (currencyCountry && typeof currencyCountry === "string") {
-      await asyncMySQL(
-        updateQuery("accounts", "currency_country", currencyCountry, id)
-      );
-    }
-
-    if (balance && typeof Number(balance) === "number") {
-      await asyncMySQL(updateQuery("accounts", "balance", balance, id));
-    }
-
-    if (userId && typeof Number(userId) === "number") {
-      await asyncMySQL(updateQuery("accounts", "user_id", userId, id));
     }
 
     // sending the final update to the front
-    res.send({ status: 1, message: "Account updated" });
+    res.send({ status: 1, message: "Transaction updated" });
     return;
   } catch (error) {
     // catch errors if any
