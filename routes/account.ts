@@ -1,15 +1,15 @@
 // IMPORTING STUFF:
 // import express
-const express = require("express");
+import express from "express";
 
 // import router
 const router = express.Router();
 
 // importing the random id generator function
-const { genRandomString } = require("../utils/math");
+import { genRandomString } from "../utils/math";
 
 // importing joi validator
-const { validate } = require("../validation/index");
+import { validate } from "../validation/index";
 
 // import asyncMySQL function
 const asyncMySQL = require("../database/connection");
@@ -185,13 +185,13 @@ router.patch("/:id", async (req, res) => {
       );
     }
 
-    if (accountNumber && typeof Number(accountNumber) === "number") {
+    if (accountNumber && typeof accountNumber === "number") {
       await asyncMySQL(
         updateQuery("accounts", "account_number", accountNumber, id)
       );
     }
 
-    if (sortCode && typeof Number(sortCode) === "number") {
+    if (sortCode && typeof sortCode === "number") {
       await asyncMySQL(updateQuery("accounts", "sort_code", sortCode, id));
     }
 
@@ -219,11 +219,11 @@ router.patch("/:id", async (req, res) => {
       );
     }
 
-    if (balance && typeof Number(balance) === "number") {
+    if (balance && typeof balance === "number") {
       await asyncMySQL(updateQuery("accounts", "balance", balance, id));
     }
 
-    if (userId && typeof Number(userId) === "number") {
+    if (userId && typeof userId === "number") {
       await asyncMySQL(updateQuery("accounts", "user_id", userId, id));
     }
 
