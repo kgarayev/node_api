@@ -185,13 +185,13 @@ router.patch("/:id", async (req, res) => {
       );
     }
 
-    if (accountNumber && typeof accountNumber === "number") {
+    if (accountNumber && typeof Number(accountNumber) === "number") {
       await asyncMySQL(
         updateQuery("accounts", "account_number", accountNumber, id)
       );
     }
 
-    if (sortCode && typeof sortCode === "number") {
+    if (sortCode && typeof Number(sortCode) === "number") {
       await asyncMySQL(updateQuery("accounts", "sort_code", sortCode, id));
     }
 
@@ -219,11 +219,11 @@ router.patch("/:id", async (req, res) => {
       );
     }
 
-    if (balance && typeof balance === "number") {
+    if (balance && typeof Number(balance) === "number") {
       await asyncMySQL(updateQuery("accounts", "balance", balance, id));
     }
 
-    if (userId && typeof userId === "number") {
+    if (userId && typeof Number(userId) === "number") {
       await asyncMySQL(updateQuery("accounts", "user_id", userId, id));
     }
 
