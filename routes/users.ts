@@ -84,13 +84,13 @@ router.get("/:id", async (req, res) => {
 // add user router
 router.post("/", async (req, res) => {
   // just console log the body
-  console.log(req.body);
+  console.log("request body: ", req.body);
 
   // validate
   let localErrors = await validate(req.body, "addUser");
 
   // log local errors if any
-  console.log(localErrors);
+  console.log("errors: ", localErrors);
 
   // notify about validation errors and abort if any
   if (localErrors) {

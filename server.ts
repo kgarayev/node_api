@@ -41,13 +41,13 @@ myApp.use(logging);
 // myApp.use("/generic", genericRouter);
 
 // view users route middleware
-myApp.use("/user", usersRouter);
+myApp.use("/users", usersRouter);
 
 // view accounts route middleware
-myApp.use("/account", accountsRouter);
+myApp.use("/accounts", accountsRouter);
 
 // view transactions route middleware
-myApp.use("/transaction", transactionsRouter);
+myApp.use("/transactions", transactionsRouter);
 
 // Mddleware section FINISH
 
