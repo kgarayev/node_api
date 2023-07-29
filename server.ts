@@ -13,10 +13,10 @@ import { logging } from "./middleware/logging";
 import cors from "cors";
 
 // importing routes
+// import { router as genericRouter } from "./routes/generic";
 import { router as usersRouter } from "./routes/users";
-import { router as userRouter } from "./routes/user";
-import { router as accountRouter } from "./routes/account";
-import { router as transactionRouter } from "./routes/transaction";
+import { router as accountsRouter } from "./routes/accounts";
+import { router as transactionsRouter } from "./routes/transactions";
 
 // creating a new instance of express
 const myApp = express();
@@ -38,16 +38,16 @@ myApp.use(logging);
 // myApp.use(simpleAuth);
 
 // view users route middleware
-myApp.use("/users", usersRouter);
+// myApp.use("/generic", genericRouter);
 
-// view user route middleware
-myApp.use("/user", userRouter);
+// view users route middleware
+myApp.use("/user", usersRouter);
 
 // view accounts route middleware
-myApp.use("/account", accountRouter);
+myApp.use("/account", accountsRouter);
 
 // view transactions route middleware
-myApp.use("/transaction", transactionRouter);
+myApp.use("/transaction", transactionsRouter);
 
 // Mddleware section FINISH
 
