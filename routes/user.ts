@@ -85,7 +85,7 @@ router.get("/:id", async (req, res) => {
 
 // POST ROUTE:
 // add user router
-router.post("/", async (req, res) => {
+router.post("/register", async (req, res) => {
   // just console log the body
   console.log("request body: ", req.body);
   // console.log("password only: ", req.body.password);
