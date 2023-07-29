@@ -8,6 +8,9 @@ const router = express.Router();
 // importing the random id generator function
 import { genRandomString } from "../utils/math";
 
+// importimport a hashing function
+import { hash256 } from "../utils/hash";
+
 // importing joi validator
 import { validate } from "../validation/index";
 
@@ -85,6 +88,7 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   // just console log the body
   console.log("request body: ", req.body);
+  // console.log("password only: ", req.body.password);
 
   // validate
   let localErrors = await validate(req.body, "addUser");
@@ -101,10 +105,15 @@ router.post("/", async (req, res) => {
   //   destructuring the body
   const { firstName, lastName, number, email, dob, password } = req.body;
 
+  // creating a password hash with a salt
+  const hashedPassword = hash256(password + "stashSalt-2023?");
+
+  // console.log(hashedPassword);
+
   // implementing the query
   try {
     await asyncMySQL(
-      addUser(firstName, lastName, number, email, dob, password)
+      addUser(firstName, lastName, number, email, dob, hashedPassword)
     );
     // notifying the user of successful result
     res.send({ status: 1, message: "User added" });
