@@ -1,5 +1,13 @@
-// importing express framework
-import express from "express";
+// importing express framework and types
+import express, { Request, Response, NextFunction } from "express";
+
+interface Error {
+  status?: number;
+  message?: string;
+}
+
+// importing helmet
+import helmet from "helmet";
 
 // import middleware functions
 import { logging } from "./middleware/logging";
@@ -23,10 +31,16 @@ const myApp = express();
 
 // Middleware section START
 
-// handle static files
-myApp.use(express.static("public"));
+// helmet middleware
+myApp.use(helmet());
+
+// disable fingerprinting
+myApp.disable("x-powered-by");
 
 myApp.use(cors()); //just fixes it for now!!!
+
+// handle static files
+myApp.use(express.static("public"));
 
 // json body parser middleware to read the body
 myApp.use(express.json());
@@ -48,6 +62,17 @@ myApp.use("/account", accountRouter);
 
 // view transactions route middleware
 myApp.use("/transaction", transactionRouter);
+
+// custom 404
+myApp.use((req: Request, res: Response, next: NextFunction) => {
+  res.status(404).send("Sorry can't find that!");
+});
+
+// custom error handler
+myApp.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.error(err);
+  res.status(500).send("Something broke!");
+});
 
 // Mddleware section FINISH
 
