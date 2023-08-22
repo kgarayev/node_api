@@ -41,6 +41,8 @@ const createDB = async (dbName: string) => {
     // Create the database if it doesn't exist
     await asyncMySQL(`CREATE DATABASE IF NOT EXISTS ${dbName}`);
 
+    console.log("database created");
+
     // wrap inside the promise
     return new Promise<void>((resolve, reject) => {
       // Switch to using the new database
