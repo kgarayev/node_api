@@ -7,6 +7,8 @@ const apiKey = "abcd1234";
 const simpleAuth = (req: Request, res: Response, next: NextFunction) => {
   // defensive check to see if the API KEY entered matches the one in the system
   if (req.headers.api_key === apiKey) {
+    console.log(apiKey);
+
     // proceed if matches
     next();
   } else {
