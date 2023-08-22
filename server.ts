@@ -80,6 +80,8 @@ myApp.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 // good practice
 const PORT = process.env.PORT || 6001;
 
+console.log(PORT);
+
 // to start the server
 myApp.listen(PORT, () => {
   console.log("The server is now running!");
