@@ -56,6 +56,8 @@ router.get("/:id", async (req, res) => {
     return;
   }
 
+  // check 
+
   // ask sql for data
   // returns an array of results
   const results = (await asyncMySQL(
